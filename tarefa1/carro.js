@@ -1,5 +1,5 @@
 (() => {
-const canvas = document.getElementById("canvasFlor");
+const canvas = document.getElementById("canvasCarro");
 const gl = canvas.getContext("webgl2");
 
 if (!gl) {
@@ -121,16 +121,20 @@ const rectColorBuffer = gl.createBuffer();
 //funções
 const segmentos = 50;
 
-//circulo
-function drawCircle(posX, posY, raio, cor){
+//substiruindo a função de círculo por uma de arco
+function drawArc(posX, posY, raio, anguloInicial, anguloFinal, cor) {
+
     const vertices = [];
 
+    // centro
     vertices.push(posX, posY);
 
     for (let i = 0; i <= segmentos; i++) {
 
         const angulo =
-            2 * Math.PI * i / segmentos;
+            anguloInicial +
+            (anguloFinal - anguloInicial) *
+            i / segmentos;
 
         const x =
             posX + Math.cos(angulo) * raio;
@@ -141,14 +145,20 @@ function drawCircle(posX, posY, raio, cor){
         vertices.push(x, y);
     }
 
-    const verticesArray = new Float32Array(vertices);
+    const verticesArray =
+        new Float32Array(vertices);
 
-    //cores
+
+    // -------------------------
+    // cores
+    // -------------------------
+
     const colors = [];
 
     const totalVertices = segmentos + 2;
 
     for (let i = 0; i < totalVertices; i++) {
+
         colors.push(
             cor[0],
             cor[1],
@@ -156,9 +166,14 @@ function drawCircle(posX, posY, raio, cor){
         );
     }
 
-    const colorsArray = new Float32Array(colors);
+    const colorsArray =
+        new Float32Array(colors);
 
-    //buffers
+
+    // -------------------------
+    // buffer dos vértices
+    // -------------------------
+
     gl.bindBuffer(
         gl.ARRAY_BUFFER,
         circleBuffer
@@ -178,6 +193,11 @@ function drawCircle(posX, posY, raio, cor){
         0,
         0
     );
+
+
+    // -------------------------
+    // buffer das cores
+    // -------------------------
 
     gl.bindBuffer(
         gl.ARRAY_BUFFER,
@@ -199,7 +219,11 @@ function drawCircle(posX, posY, raio, cor){
         0
     );
 
-    //desenho
+
+    // -------------------------
+    // desenho
+    // -------------------------
+
     gl.drawArrays(
         gl.TRIANGLE_FAN,
         0,
@@ -283,17 +307,14 @@ gl.clearColor(0.1, 0.1, 0.1, 1.0);
 
 gl.clear(gl.COLOR_BUFFER_BIT);
 
-//desenho
-drawRectangle(0.0, -0.5, 0.03, 0.8, [0.0, 1.0, 0.0]); //caule
-
-//pétalas
-drawCircle(0.0, 0.04, 0.07, [0.0, 1.0, 1.0]);
-drawCircle(0.0, -0.1, 0.07, [0.0, 1.0, 1.0]);
-drawCircle(0.07, -0.03, 0.07, [0.0, 1.0, 1.0]);
-drawCircle(-0.07, -0.03, 0.07, [0.0, 1.0, 1.0]);
-
-drawCircle(0.0, -0.03, 0.09, [1.0, 1.0, 0.0]); //centro (ou sei lá o nome)
+drawRectangle(0.0, 0.0, 0.6, 0.3, [1.0, 0.0, 0.0, 1.0]); //meio
+drawArc(-0.3, -0.15, 0.28, Math.PI/2, Math.PI, [1.0, 0.0, 0.0, 1.0]); //traseira
+drawArc(0.3, -0.15, 0.28, 0, Math.PI/2, [1.0, 0.0, 0.0, 1.0]); //frente
+drawArc(-0.3, -0.15, 0.1, 0, 2*Math.PI, [0.0, 0.0, 0.0, 1.0]); //pneu 1
+drawArc(0.3, -0.15, 0.1, 0, 2*Math.PI, [0.0, 0.0, 0.0, 1.0]); //pneu 2
+drawArc(0.3, -0.15, 0.05, 0, 2*Math.PI, [0.2, 0.2, 0.2, 1.0]);
+drawArc(-0.3, -0.15, 0.05, 0, 2*Math.PI, [0.2, 0.2, 0.2, 1.0]);
+drawArc(0.0, 0.01, 0.38, 0, Math.PI, [1.0, 0.0, 0.0, 1.0]); //teto
+drawArc(0.02, 0.15, 0.19, 0, Math.PI, [0.0, 1.0, 1.0, 1.0]); //vidro
+drawArc(0.41, 0.0000003, 0.08, 0, Math.PI/2, [1.0, 1.0, 0.0, 1.0]); //farol
 })();
-
-
-
