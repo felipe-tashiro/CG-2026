@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tarefa de desenhos</title>
+
+    <style>
+        .desenhos {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .desenho {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="desenhos">
+
+        <div class="desenho">
+            <h2>Retângulo</h2>
+            <canvas id="canvasRet"
+                    width="800"
+                    height="800">
+            </canvas>
+        </div>
+
+        <div class="desenho">
+            <h2>Triângulo</h2>
+            <canvas id="canvasTri"
+                    width="800"
+                    height="800">
+            </canvas>
+        </div>
+
+    </div>
+
+    <script src="retangulo.js"></script>
+    <script src="triangluo.js"></script>
+
+</body>
+
+</html>
